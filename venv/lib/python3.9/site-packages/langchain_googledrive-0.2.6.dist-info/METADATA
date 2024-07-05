@@ -1,0 +1,66 @@
+Metadata-Version: 2.1
+Name: langchain-googledrive
+Version: 0.2.6
+Summary: This is a more advanced integration of Google Drive with langchain.
+Home-page: https://www.github.com/pprados/langchain-googledrive
+License: Apache 2.0
+Author: Philippe PRADOS
+Requires-Python: >=3.8.1,<4.0.0
+Classifier: License :: Other/Proprietary License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Provides-Extra: all
+Requires-Dist: google-api-python-client (>=2.97,<3.0)
+Requires-Dist: google-auth-httplib2 (>=0.1)
+Requires-Dist: google-auth-oauthlib (>=1.0)
+Requires-Dist: langchain_community (>=0.2.4)
+Requires-Dist: langchain_core (>=0.2.5)
+Project-URL: Repository, https://www.github.com/pprados/langchain-googledrive
+Description-Content-Type: text/markdown
+
+This is a more advanced integration of Google Drive with langchain.
+
+# Install
+```
+pip install langchain-googledrive
+```
+
+# For debug
+```
+poetry install -with test
+make test
+```
+
+# Features:
+
+Langchain component:
+- [Document Loaders](docs/integrations/document_loaders/google_drive.ipynb)
+- [Retrievers](docs/integrations/retrievers/google_drive.ipynb)
+- [Toolkits](docs/integrations/toolkits/google_drive.ipynb)
+
+Fully compatible with Google Drive API
+- Manage file in trash
+- Manage shortcut
+- Manage file description
+- Paging with request GDrive list()
+- Multiple kinds of template for request GDrive
+- Convert a lot of mime type (can be configured). The list is adjusted according to the packages availables
+- Can use only the description of files, without loading and conversion of the body
+- Lambda fine filter
+- Remove duplicate documents (in case of shortcut)
+- Add Url to documents (or part of documents like specific slide)
+- Use environment variable for reference an API tokens
+- Manage different king of strange state with Google File (absence of URL, etc.)
+- Use fully lazy strategy to save memory
+- Convert GDoc, GSheet and GSlide with different modes
+    - Extract text, bullet point, tables, titles, links
+
+  
+# langchain Pull-request
+I couldn't get a [pull-request](https://github.com/hwchase17/langchain/pull/5135) accepted because 
+the project is too big.
+Sorry for that.
+
