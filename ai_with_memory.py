@@ -5,6 +5,8 @@ from langchain_core.messages import BaseMessage
 from pydantic import BaseModel, Field
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
+import os
+OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 class InMemoryHistory(BaseChatMessageHistory, BaseModel):
     """In memory implementation of chat message history."""
 
@@ -27,7 +29,7 @@ prompt = ChatPromptTemplate.from_messages([
     MessagesPlaceholder(variable_name="history"),
     ("human", "{question}"),
 ])
-chain = prompt | ChatOpenAI(api_key="sk-proj-Ig7SRM7Na6wsDCXNWp8iT3BlbkFJKA7kBGcjrpUIbOuUX2GG")
+chain = prompt | ChatOpenAI(api_key=OPENAI_API_KEY)
 chain_with_history = RunnableWithMessageHistory(
     chain,
     get_by_session_id,
