@@ -23,9 +23,8 @@ from langchain_google_community.drive import GoogleDriveLoader
 import os
 #from retrieve_from_google_drive import docs
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-"""loader = GoogleDriveLoader(
+loader = GoogleDriveLoader(
     folder_id="1PI1pAOriyWQPOpLvUJcgKpCHTrDe12c7",
-    service_account_key='./credentials/credentials.json',
     recursive=False,
 )
 docs=loader.load()
@@ -33,7 +32,7 @@ text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 texts = text_splitter.split_documents(docs)
 embeddings = OpenAIEmbeddings()
 db = FAISS.from_documents(texts, embeddings)
-retriever = db.as_retriever()"""
+retriever = db.as_retriever()
 
 
 logging.basicConfig(level=logging.INFO)
