@@ -23,7 +23,7 @@ from langchain_google_community.drive import GoogleDriveLoader
 import os
 
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-SERVEICE_ACCOUNT_KEY=os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+SERVEICE_ACCOUNT_KEY=os.environ.get('GOOGLE_APPLICATION_SECRETS')
 load=GoogleDriveLoader(
     folder_id="1PI1pAOriyWQPOpLvUJcgKpCHTrDe12c7",
     service_account_key=SERVEICE_ACCOUNT_KEY,
