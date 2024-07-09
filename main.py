@@ -25,6 +25,7 @@ import os
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 SERVEICE_ACCOUNT_KEY=os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
 load=GoogleDriveLoader(
+    folder_id="1PI1pAOriyWQPOpLvUJcgKpCHTrDe12c7",
     service_account_key=SERVEICE_ACCOUNT_KEY,
     recursive=False
 )
@@ -48,13 +49,13 @@ def tavilysearch(search: str) ->str:
     Tavily=TavilySearchResults(max_results=3)
     return Tavily.invoke(search)
 tools = [tavilysearch]
-"""retriever_tool = create_retriever_tool(
+retriever_tool = create_retriever_tool(
     retriever,
     "search_state_of_union",
     "Searches and returns excerpts from the 2022 State of the Union.",
 )
 retriever_tools=[retriever_tool]
-two_tools=[retriever_tool,tavilysearch]"""
+two_tools=[retriever_tool,tavilysearch]
 
 
 
@@ -86,8 +87,8 @@ agent_history_prompt=ChatPromptTemplate.from_messages(    [
 llm = ChatOpenAI(temperature=1.2,openai_api_key=OPENAI_API_KEY)
 chain = my_prompt | llm
 llm_with_tavily_tools = llm.bind(tools=[convert_to_openai_tool(tool)for tool in tools])
-#llm_with_retriever_tools = llm.bind(tools=[convert_to_openai_tool(tool) for tool in retriever_tools])
-#llm_with_tavily_and_retriever_tools = llm.bind(tools=[convert_to_openai_tool(tool) for tool in two_tools])
+llm_with_retriever_tools = llm.bind(tools=[convert_to_openai_tool(tool) for tool in retriever_tools])
+llm_with_tavily_and_retriever_tools = llm.bind(tools=[convert_to_openai_tool(tool) for tool in two_tools])
 
 tavily_agent = (
     {
@@ -108,7 +109,7 @@ tavily_agent_history = (
     | llm_with_tavily_tools
     | OpenAIToolsAgentOutputParser()
 )
-"""retriever_agent = (
+retriever_agent = (
     {
         "question": lambda x: x["question"],
         "agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
@@ -138,17 +139,17 @@ both_tool_agent = ({
     | OpenAIToolsAgentOutputParser()
 )
 
-"""
+
 
 
 
 tavily_agent_executor = AgentExecutor(agent=tavily_agent, tools=tools, verbose=True)
 tavily_agent_executor_history =  AgentExecutor(agent=tavily_agent_history, tools=tools, verbose=True)
 
-"""retriever_agent_executor = AgentExecutor(agent=retriever_agent, tools=retriever_tools, verbose=True)
+retriever_agent_executor = AgentExecutor(agent=retriever_agent, tools=retriever_tools, verbose=True)
 retriever_agent_executor_history =  AgentExecutor(agent=retriever_agent_history, tools=retriever_tools, verbose=True)
 
-retriever_tavily_agent_executor_history =AgentExecutor(agent=both_tool_agent, tools=two_tools, verbose=True)"""
+retriever_tavily_agent_executor_history =AgentExecutor(agent=both_tool_agent, tools=two_tools, verbose=True)
 
 
 tavily_agent_with_history = RunnableWithMessageHistory(
@@ -157,13 +158,13 @@ tavily_agent_with_history = RunnableWithMessageHistory(
     history_messages_key="history",
     get_session_history=accessing_history
 )
-"""retriever_agent_with_history=RunnableWithMessageHistory(
+retriever_agent_with_history=RunnableWithMessageHistory(
     retriever_agent_executor_history,
     input_messages_key="question",
     history_messages_key="history",
     get_session_history=accessing_history
 )
-"""
+
 
 
 
@@ -209,20 +210,6 @@ async def agent_model(request: QueryRequest):
     final_content=response_list[-1]
     print(final_content.get('messages')[0].content)
     return {final_content.get('messages')[0].content}
-"""@app.post("/google-login")
-async def login():
-    loader = GoogleDriveLoader(
-    folder_id="1PI1pAOriyWQPOpLvUJcgKpCHTrDe12c7",
-    file_types=["pdf"],
-    recursive=True,
-    )
-    docs = loader.load()
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-    texts = text_splitter.split_documents(docs)
-    embeddings = OpenAIEmbeddings()
-    db = FAISS.from_documents(texts, embeddings)
-    retriever = db.as_retriever()
-    return{"Success!"}
 @app.post("/query/Ragent")
 async def agent_model(request: QueryRequest):
     input_data=request.question
@@ -231,7 +218,7 @@ async def agent_model(request: QueryRequest):
     final_content=response_list[-1]
     print(final_content.get('messages')[0].content)
     return {final_content.get('messages')[0].content}
-"""
+
 @app.post("/query/Sagent-memory")
 async def query_model(request: QueryRequest):
     input_data = request.question
@@ -244,7 +231,7 @@ async def query_model(request: QueryRequest):
     ])
     print(response)
     return {response["output"]}
-"""
+
 @app.post("/query/Ragent-memory")
 async def query_model(request: QueryRequest):
     input_data = request.question
@@ -270,6 +257,5 @@ async def query_model(request: QueryRequest):
     ])
     print(response)
     return {response["output"]}
-"""
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080)

@@ -4,7 +4,6 @@ FROM python:3.9.7-slim
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-
 # Set the working directory to root
 WORKDIR /
 
