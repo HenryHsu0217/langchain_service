@@ -264,9 +264,10 @@ async def query_model(request: QueryRequest):
         HumanMessage(content=input_data),
         AIMessage(content=response["output"]),
     ])
+    if len(history)>3:
+        history.pop(0)
     print(response)
     return {response["output"]}
-
 @app.post("/query/RSagent-memory")
 async def query_model(request: QueryRequest):
     input_data = request.question
