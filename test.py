@@ -29,17 +29,3 @@ def fetch_and_process_pdf(file_id):
 
     return documents
 
-def main():
-    file_id = '1PI1pAOriyWQPOpLvUJcgKpCHTrDe12c7'
-    documents = fetch_and_process_pdf(file_id)
-    
-    # Print some information about the documents
-    print(f"Number of documents: {len(documents)}")
-    for i, doc in enumerate(documents):
-        print(f"Document {i + 1}:")
-        print(f"  Page Content (first 100 chars): {doc.page_content[:100]}...")
-        print(f"  Metadata: {doc.metadata}")
-        print()
-
-if __name__ == "__main__":
-    main()
