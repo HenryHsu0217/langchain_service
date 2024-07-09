@@ -82,8 +82,22 @@ agent_history_prompt=ChatPromptTemplate.from_messages(    [
         ("user", "{question}"),
         MessagesPlaceholder(variable_name="agent_scratchpad"),
     ])
-
-
+retriever_agent_history_prompt=ChatPromptTemplate.from_messages(    [
+        (
+            "system",
+            "You are a helpful assistant that will answer, response to the user's input, accroding to the user's request, chat {history}, and the documents that you have access to."
+        ),
+        ("user", "{question}"),
+        MessagesPlaceholder(variable_name="agent_scratchpad"),
+    ])
+retriever_agent_prompt=ChatPromptTemplate.from_messages(    [
+        (
+            "system",
+            "You are a helpful assistant that will answer, and response to the user's input accroding to the documents that you have accsss to."
+        ),
+        ("user", "{question}"),
+        MessagesPlaceholder(variable_name="agent_scratchpad"),
+    ])
 
 llm = ChatOpenAI(temperature=1.2,openai_api_key=OPENAI_API_KEY)
 chain = my_prompt | llm
@@ -110,25 +124,7 @@ tavily_agent_history = (
     | llm_with_tavily_tools
     | OpenAIToolsAgentOutputParser()
 )
-retriever_agent = (
-    {
-        "question": lambda x: x["question"],
-        "agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
-    }
-    | agent_prompt
-    | llm_with_retriever_tools
-    | OpenAIToolsAgentOutputParser()
-)
-"""retriever_agent_history = (
-    {
-        "question": lambda x: x["question"],
-        "agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
-        "history": lambda x: x["history"]
-    }
-    | agent_history_prompt
-    | llm_with_retriever_tools
-    | OpenAIToolsAgentOutputParser()
-)"""
+
 
 both_tool_agent = ({
         "question": lambda x: x["question"],
@@ -146,10 +142,6 @@ both_tool_agent = ({
 
 tavily_agent_executor = AgentExecutor(agent=tavily_agent, tools=tools, verbose=True)
 tavily_agent_executor_history =  AgentExecutor(agent=tavily_agent_history, tools=tools, verbose=True)
-
-retriever_agent_executor = AgentExecutor(agent=retriever_agent, tools=retriever_tools, verbose=True)
-#retriever_agent_executor_history =  AgentExecutor(agent=retriever_agent_history, tools=retriever_tools, verbose=True)
-
 retriever_tavily_agent_executor_history =AgentExecutor(agent=both_tool_agent, tools=two_tools, verbose=True)
 
 
@@ -159,12 +151,6 @@ tavily_agent_with_history = RunnableWithMessageHistory(
     history_messages_key="history",
     get_session_history=accessing_history
 )
-"""retriever_agent_with_history=RunnableWithMessageHistory(
-    retriever_agent_executor_history,
-    input_messages_key="question",
-    history_messages_key="history",
-    get_session_history=accessing_history
-)"""
 
 
 
@@ -183,7 +169,7 @@ class Output(LangChainBaseModel):
 
 add_routes(app,chain.with_types(input_type=Input),playground_type="default", path="/Xassistant")
 add_routes(app, tavily_agent_executor.with_types(input_type=Input, output_type=Output).with_config({"run_name": "Sagent"}), path="/Sagent")
-add_routes(app, retriever_agent_executor.with_types(input_type=Input, output_type=Output).with_config({"run_name": "Ragent"}), path="/Ragent")
+#add_routes(app, retriever_agent_executor.with_types(input_type=Input, output_type=Output).with_config({"run_name": "Ragent"}), path="/Ragent")
 
 
 
@@ -214,6 +200,23 @@ async def agent_model(request: QueryRequest):
 @app.post("/query/Ragent")
 async def agent_model(request: QueryRequest):
     input_data=request.question
+    retriever_tool = create_retriever_tool(
+    create_retriever(),
+    "search_state_of_union",
+    "Searches and returns excerpts from the 2022 State of the Union.",
+    )
+    retriever_tools=[retriever_tool]
+    llm_with_retriever_tools = llm.bind(tools=[convert_to_openai_tool(tool) for tool in retriever_tools])
+    retriever_agent = (
+    {
+        "question": lambda x: x["question"],
+        "agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
+    }
+    | retriever_agent_prompt
+    | llm_with_retriever_tools
+    | OpenAIToolsAgentOutputParser()
+    )
+    retriever_agent_executor = AgentExecutor(agent=retriever_agent, tools=retriever_tools, verbose=True)
     response=retriever_agent_executor.stream({"question": input_data})
     response_list=list(response)
     final_content=response_list[-1]
@@ -251,7 +254,7 @@ async def query_model(request: QueryRequest):
         "agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
         "history": lambda x: x["history"]
     }
-    | agent_history_prompt
+    | retriever_agent_history_prompt
     | llm_with_retriever_tools
     | OpenAIToolsAgentOutputParser()
     )
