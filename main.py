@@ -21,12 +21,10 @@ from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_google_community.drive import GoogleDriveLoader
 import os
+from test import fetch_and_process_pdf
 #from retrieve_from_google_drive import docs
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-loader = GoogleDriveLoader(
-    folder_id="1PI1pAOriyWQPOpLvUJcgKpCHTrDe12c7",
-    recursive=False,
-)
+loader=fetch_and_process_pdf('1PI1pAOriyWQPOpLvUJcgKpCHTrDe12c7')
 docs=loader.load()
 text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
 texts = text_splitter.split_documents(docs)
