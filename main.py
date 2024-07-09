@@ -183,7 +183,7 @@ class Output(LangChainBaseModel):
 
 add_routes(app,chain.with_types(input_type=Input),playground_type="default", path="/Xassistant")
 add_routes(app, tavily_agent_executor.with_types(input_type=Input, output_type=Output).with_config({"run_name": "Sagent"}), path="/Sagent")
-#add_routes(app, retriever_agent_executor.with_types(input_type=Input, output_type=Output).with_config({"run_name": "Ragent"}), path="/Ragent")
+add_routes(app, retriever_agent_executor.with_types(input_type=Input, output_type=Output).with_config({"run_name": "Ragent"}), path="/Ragent")
 
 
 
