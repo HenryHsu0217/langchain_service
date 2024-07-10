@@ -28596,6 +28596,204 @@
 }
 }
 },
+"regionMultiMigs": {
+"methods": {
+"delete": {
+"description": "Deletes a regional multiMIG in the specified project.",
+"flatPath": "projects/{project}/regions/{region}/multiMigs/{multiMig}",
+"httpMethod": "DELETE",
+"id": "compute.regionMultiMigs.delete",
+"parameterOrder": [
+"project",
+"region",
+"multiMig"
+],
+"parameters": {
+"multiMig": {
+"description": "Name of the multiMIG to delete.",
+"location": "path",
+"required": true,
+"type": "string"
+},
+"project": {
+"description": "Project ID for this request.",
+"location": "path",
+"pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+"required": true,
+"type": "string"
+},
+"region": {
+"description": "Name of the region for this request.",
+"location": "path",
+"pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+"required": true,
+"type": "string"
+},
+"requestId": {
+"description": "An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported ( 00000000-0000-0000-0000-000000000000).",
+"location": "query",
+"type": "string"
+}
+},
+"path": "projects/{project}/regions/{region}/multiMigs/{multiMig}",
+"response": {
+"$ref": "Operation"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/compute"
+]
+},
+"get": {
+"description": "Returns the specified MultiMIG resource.",
+"flatPath": "projects/{project}/regions/{region}/multiMigs/{multiMig}",
+"httpMethod": "GET",
+"id": "compute.regionMultiMigs.get",
+"parameterOrder": [
+"project",
+"region",
+"multiMig"
+],
+"parameters": {
+"multiMig": {
+"description": "Name of the MultiMig resource to return.",
+"location": "path",
+"pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?|[1-9][0-9]{0,19}",
+"required": true,
+"type": "string"
+},
+"project": {
+"description": "Project ID for this request.",
+"location": "path",
+"pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+"required": true,
+"type": "string"
+},
+"region": {
+"description": "Name of the region for this request.",
+"location": "path",
+"pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+"required": true,
+"type": "string"
+}
+},
+"path": "projects/{project}/regions/{region}/multiMigs/{multiMig}",
+"response": {
+"$ref": "MultiMig"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/compute",
+"https://www.googleapis.com/auth/compute.readonly"
+]
+},
+"insert": {
+"description": "Creates a regional multiMIG in the specified project.",
+"flatPath": "projects/{project}/regions/{region}/multiMigs",
+"httpMethod": "POST",
+"id": "compute.regionMultiMigs.insert",
+"parameterOrder": [
+"project",
+"region"
+],
+"parameters": {
+"project": {
+"description": "Project ID for this request.",
+"location": "path",
+"pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+"required": true,
+"type": "string"
+},
+"region": {
+"description": "Name of the region for this request.",
+"location": "path",
+"pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+"required": true,
+"type": "string"
+},
+"requestId": {
+"description": "An optional request ID to identify requests. Specify a unique request ID so that if you must retry your request, the server will know to ignore the request if it has already been completed. For example, consider a situation where you make an initial request and the request times out. If you make the request again with the same request ID, the server can check if original operation with the same request ID was received, and if so, will ignore the second request. This prevents clients from accidentally creating duplicate commitments. The request ID must be a valid UUID with the exception that zero UUID is not supported ( 00000000-0000-0000-0000-000000000000).",
+"location": "query",
+"type": "string"
+}
+},
+"path": "projects/{project}/regions/{region}/multiMigs",
+"request": {
+"$ref": "MultiMig"
+},
+"response": {
+"$ref": "Operation"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/compute"
+]
+},
+"list": {
+"description": "Retrieves a list of MultiMIGs in a project and region.",
+"flatPath": "projects/{project}/regions/{region}/multiMigs",
+"httpMethod": "GET",
+"id": "compute.regionMultiMigs.list",
+"parameterOrder": [
+"project",
+"region"
+],
+"parameters": {
+"filter": {
+"description": "A filter expression that filters resources listed in the response. Most Compute resources support two types of filter expressions: expressions that support regular expressions and expressions that follow API improvement proposal AIP-160. These two types of filter expressions cannot be mixed in one request. If you want to use AIP-160, your expression must specify the field name, an operator, and the value that you want to use for filtering. The value must be a string, a number, or a boolean. The operator must be either `=`, `!=`, `>`, `<`, `<=`, `>=` or `:`. For example, if you are filtering Compute Engine instances, you can exclude instances named `example-instance` by specifying `name != example-instance`. The `:*` comparison can be used to test whether a key has been defined. For example, to find all objects with `owner` label use: ``` labels.owner:* ``` You can also filter nested fields. For example, you could specify `scheduling.automaticRestart = false` to include instances only if they are not scheduled for automatic restarts. You can use filtering on nested fields to filter based on resource labels. To filter on multiple expressions, provide each separate expression within parentheses. For example: ``` (scheduling.automaticRestart = true) (cpuPlatform = \"Intel Skylake\") ``` By default, each expression is an `AND` expression. However, you can include `AND` and `OR` expressions explicitly. For example: ``` (cpuPlatform = \"Intel Skylake\") OR (cpuPlatform = \"Intel Broadwell\") AND (scheduling.automaticRestart = true) ``` If you want to use a regular expression, use the `eq` (equal) or `ne` (not equal) operator against a single un-parenthesized expression with or without quotes or against multiple parenthesized expressions. Examples: `fieldname eq unquoted literal` `fieldname eq 'single quoted literal'` `fieldname eq \"double quoted literal\"` `(fieldname1 eq literal) (fieldname2 ne \"literal\")` The literal value is interpreted as a regular expression using Google RE2 library syntax. The literal value must match the entire field. For example, to filter for instances that do not end with name \"instance\", you would use `name ne .*instance`. You cannot combine constraints on multiple fields using regular expressions.",
+"location": "query",
+"type": "string"
+},
+"maxResults": {
+"default": "500",
+"description": "The maximum number of results per page that should be returned. If the number of available results is larger than `maxResults`, Compute Engine returns a `nextPageToken` that can be used to get the next page of results in subsequent list requests. Acceptable values are `0` to `500`, inclusive. (Default: `500`)",
+"format": "uint32",
+"location": "query",
+"minimum": "0",
+"type": "integer"
+},
+"orderBy": {
+"description": "Sorts list results by a certain order. By default, results are returned in alphanumerical order based on the resource name. You can also sort results in descending order based on the creation timestamp using `orderBy=\"creationTimestamp desc\"`. This sorts results based on the `creationTimestamp` field in reverse chronological order (newest result first). Use this to sort resources like operations so that the newest operation is returned first. Currently, only sorting by `name` or `creationTimestamp desc` is supported.",
+"location": "query",
+"type": "string"
+},
+"pageToken": {
+"description": "Specifies a page token to use. Set `pageToken` to the `nextPageToken` returned by a previous list request to get the next page of results.",
+"location": "query",
+"type": "string"
+},
+"project": {
+"description": "Project ID for this request.",
+"location": "path",
+"pattern": "(?:(?:[-a-z0-9]{1,63}\\.)*(?:[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?):)?(?:[0-9]{1,19}|(?:[a-z0-9](?:[-a-z0-9]{0,61}[a-z0-9])?))",
+"required": true,
+"type": "string"
+},
+"region": {
+"description": "Name of the region for this request.",
+"location": "path",
+"pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+"required": true,
+"type": "string"
+},
+"returnPartialSuccess": {
+"description": "Opt-in for partial success behavior which provides partial results in case of failure. The default value is false. For example, when partial success behavior is enabled, aggregatedList for a single zone scope either returns all resources in the zone or no resources, with an error code.",
+"location": "query",
+"type": "boolean"
+}
+},
+"path": "projects/{project}/regions/{region}/multiMigs",
+"response": {
+"$ref": "MultiMigsList"
+},
+"scopes": [
+"https://www.googleapis.com/auth/cloud-platform",
+"https://www.googleapis.com/auth/compute",
+"https://www.googleapis.com/auth/compute.readonly"
+]
+}
+}
+},
 "regionNetworkEndpointGroups": {
 "methods": {
 "attachNetworkEndpoints": {
@@ -38770,7 +38968,7 @@
 ]
 },
 "update": {
-"description": "Updates the specified storagePool with the data included in the request. The update is performed only on selected fields included as part of update-mask. Only the following fields can be modified: size_tb and provisioned_iops.",
+"description": "Updates the specified storagePool with the data included in the request. The update is performed only on selected fields included as part of update-mask. Only the following fields can be modified: pool_provisioned_capacity_gb, pool_provisioned_iops and pool_provisioned_throughput.",
 "flatPath": "projects/{project}/zones/{zone}/storagePools/{storagePool}",
 "httpMethod": "PATCH",
 "id": "compute.storagePools.update",
@@ -44517,7 +44715,7 @@
 }
 }
 },
-"revision": "20240604",
+"revision": "20240618",
 "rootUrl": "https://compute.googleapis.com/",
 "schemas": {
 "AWSV4Signature": {
@@ -45898,6 +46096,26 @@ false
 },
 "acceleratorType": {
 "description": "Full or partial URL to accelerator type. e.g. \"projects/{PROJECT}/zones/{ZONE}/acceleratorTypes/ct4l\"",
+"type": "string"
+}
+},
+"type": "object"
+},
+"AllocationReservationSharingPolicy": {
+"id": "AllocationReservationSharingPolicy",
+"properties": {
+"serviceShareType": {
+"description": "Sharing config for all Google Cloud services.",
+"enum": [
+"ALLOW_ALL",
+"DISALLOW_ALL",
+"SERVICE_SHARE_TYPE_UNSPECIFIED"
+],
+"enumDescriptions": [
+"Allow all Google Cloud managed services to share reservations.",
+"[Default] Disallow sharing with all Google Cloud services.",
+""
+],
 "type": "string"
 }
 },
@@ -59961,6 +60179,20 @@ false
 "$ref": "InstanceGroupManagerInstanceLifecyclePolicyMetadataBasedReadinessSignal",
 "deprecated": true,
 "description": "The configuration for metadata based readiness signal sent by the instance during initialization when stopping / suspending an instance. The Instance Group Manager will wait for a signal that indicates successful initialization before stopping / suspending an instance. If a successful readiness signal is not sent before timeout, the corresponding instance will not be stopped / suspended. Instead, an error will be visible in the lastAttempt.errors field of the managed instance in the listmanagedinstances method. If metadataBasedReadinessSignal.timeoutSec is unset, the Instance Group Manager will directly proceed to suspend / stop instances, skipping initialization on them."
+},
+"onFailedHealthCheck": {
+"description": "The action that a MIG performs on an unhealthy VM. A VM is marked as unhealthy when the application running on that VM fails a health check. Valid values are: - DEFAULT_ACTION (default): The MIG performs the same action as specified in the instanceLifecyclePolicy.defaultActionOnFailure field. If the defaultActionOnFailure field is set to REPAIR, then the MIG repairs unhealthy VMs. If the defaultActionOnFailure field is set to DO_NOTHING, then the MIG doesn't repair unhealthy VMs. - REPAIR: The MIG repairs unhealthy VMs by recreating it. - DO_NOTHING: The MIG doesn't repair unhealthy VMs. For more information, see About repairing VMs in a MIG. ",
+"enum": [
+"DEFAULT_ACTION",
+"DO_NOTHING",
+"REPAIR"
+],
+"enumDescriptions": [
+"(Default) The MIG performs the same action as specified in the instanceLifecyclePolicy.defaultActionOnFailure field. If the defaultActionOnFailure field is set to REPAIR, then the MIG repairs unhealthy VMs. If the defaultActionOnFailure field is set to DO_NOTHING, then the MIG doesn't repair unhealthy VMs.",
+"The MIG doesn't repair unhealthy VMs.",
+"The MIG repairs unhealthy VMs by recreating it."
+],
+"type": "string"
 }
 },
 "type": "object"
@@ -62148,7 +62380,7 @@ false
 "compute.instanceTemplates.insert"
 ]
 },
-"description": "The machine type to use for instances that are created from these properties. This field only accept machine types name. e.g. n2-standard-4 and does not accept machine type full or partial url. e.g. projects/my-l7ilb-project/zones/us-central1-a/machineTypes/n2-standard-4 will throw INTERNAL_ERROR.",
+"description": "The machine type to use for instances that are created from these properties. This field only accepts a machine type name, for example `n2-standard-4`. If you use the machine type full or partial URL, for example `projects/my-l7ilb-project/zones/us-central1-a/machineTypes/n2-standard-4`, the request will result in an `INTERNAL_ERROR`.",
 "type": "string"
 },
 "metadata": {
@@ -64111,7 +64343,7 @@ false
 "type": "object"
 },
 "InterconnectApplicationAwareInterconnectBandwidthPercentage": {
-"description": "Specify bandwidth percentages (0-100) for various traffic classes in BandwidthPercentagePolicy. The sum of all percentages must equal 100. It is valid to specify percentages for some classes and not for others. The others will be implicitly marked as 0.",
+"description": "Specify bandwidth percentages [1-100] for various traffic classes in BandwidthPercentagePolicy. The sum of all percentages must equal 100. All traffic classes must have a percentage value specified.",
 "id": "InterconnectApplicationAwareInterconnectBandwidthPercentage",
 "properties": {
 "percentage": {
@@ -68356,6 +68588,271 @@ false
 "description": "The whole units of the amount. For example if `currencyCode` is `\"USD\"`, then 1 unit is one US dollar.",
 "format": "int64",
 "type": "string"
+}
+},
+"type": "object"
+},
+"MultiMig": {
+"description": "MultiMIG represents a group of Managed Instance Groups.",
+"id": "MultiMig",
+"properties": {
+"creationTimestamp": {
+"description": "[Output Only] Creation timestamp in RFC3339 text format.",
+"type": "string"
+},
+"description": {
+"description": "An optional description of this resource. Provide this property when you create the resource.",
+"type": "string"
+},
+"id": {
+"description": "[Output Only] The unique identifier for the resource. This identifier is defined by the server.",
+"format": "uint64",
+"type": "string"
+},
+"kind": {
+"default": "compute#multiMig",
+"description": "[Output Only] Type of the resource. Always compute#multiMig for MultiMIGs.",
+"type": "string"
+},
+"locationPolicy": {
+"$ref": "MultiMigLocationPolicy"
+},
+"name": {
+"description": "Name of the resource. Provided by the client when the resource is created. The name must be 1-63 characters long, and comply with RFC1035. Specifically, the name must be 1-63 characters long and match the regular expression `[a-z]([-a-z0-9]*[a-z0-9])?` which means the first character must be a lowercase letter, and all following characters must be a dash, lowercase letter, or digit, except the last character, which cannot be a dash.",
+"pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
+"type": "string"
+},
+"parts": {
+"additionalProperties": {
+"$ref": "MultiMigPart"
+},
+"description": "User-provided names for Parts of MultiMIG and the Parts themselves.",
+"type": "object"
+},
+"region": {
+"description": "[Output Only] URL of the region where the resource resides. Only applicable for regional resources. You must specify this field as part of the HTTP request URL. It is not settable as a field in the request body.",
+"type": "string"
+},
+"schedulingPolicy": {
+"$ref": "MultiMigSchedulingPolicy",
+"description": "Policy for handling provisioning and other scheduling-related events."
+},
+"selfLink": {
+"description": "[Output only] Server-defined URL for the resource.",
+"type": "string"
+},
+"selfLinkWithId": {
+"description": "[Output Only] Server-defined URL for this resource with the resource id.",
+"type": "string"
+}
+},
+"type": "object"
+},
+"MultiMigLocationPolicy": {
+"description": "Policy regarding where to create MIGs Initially only zonal MIGs in the same zone are supported.",
+"id": "MultiMigLocationPolicy",
+"properties": {
+"provisioningZones": {
+"description": "List of zones where MIGs will be provisioned. Should be valid RFC1035 name",
+"items": {
+"type": "string"
+},
+"type": "array"
+}
+},
+"type": "object"
+},
+"MultiMigPart": {
+"description": "Config for an MMIG part.",
+"id": "MultiMigPart",
+"properties": {
+"instanceGroupManager": {
+"description": "Link to an existing InstanceGroupManager that will be adopted by a MultiMIG.",
+"type": "string"
+},
+"instanceGroupManagerProperties": {
+"$ref": "InstanceGroupManager",
+"description": "InstanceGroupManager to be created by the multiMig"
+}
+},
+"type": "object"
+},
+"MultiMigSchedulingPolicy": {
+"description": "Policy for handling provisioning and other scheduling-related events.",
+"id": "MultiMigSchedulingPolicy",
+"properties": {
+"provisioning": {
+"description": "How provisioning of MIGs should be scheduled (coordinated or not)",
+"enum": [
+"ANY",
+"COOORDINATED"
+],
+"enumDescriptions": [
+"Allows idependent lifecycles of parts.",
+"Requires all parts at the same time."
+],
+"type": "string"
+}
+},
+"type": "object"
+},
+"MultiMigsList": {
+"id": "MultiMigsList",
+"properties": {
+"etag": {
+"type": "string"
+},
+"id": {
+"description": "Unique identifier for the resource; defined by the server.",
+"type": "string"
+},
+"items": {
+"description": "A list of MultiMig resources.",
+"items": {
+"$ref": "MultiMig"
+},
+"type": "array"
+},
+"kind": {
+"default": "compute#multiMigList",
+"description": "Type of resource.",
+"type": "string"
+},
+"nextPageToken": {
+"description": "This token allows you to get the next page of results for maxResults, use the nextPageToken as a value for the query parameter pageToken in the next list request. Subsequent list requests will have their own nextPageToken to continue paging through the results.",
+"type": "string"
+},
+"selfLink": {
+"description": "[Output only] Server-defined URL for this resource.",
+"type": "string"
+},
+"unreachables": {
+"description": "[Output only] Unreachable resources.",
+"items": {
+"type": "string"
+},
+"type": "array"
+},
+"warning": {
+"description": "Informational warning message.",
+"properties": {
+"code": {
+"description": "[Output Only] A warning code, if applicable. For example, Compute Engine returns NO_RESULTS_ON_PAGE if there are no results in the response.",
+"enum": [
+"CLEANUP_FAILED",
+"DEPRECATED_RESOURCE_USED",
+"DEPRECATED_TYPE_USED",
+"DISK_SIZE_LARGER_THAN_IMAGE_SIZE",
+"EXPERIMENTAL_TYPE_USED",
+"EXTERNAL_API_WARNING",
+"FIELD_VALUE_OVERRIDEN",
+"INJECTED_KERNELS_DEPRECATED",
+"INVALID_HEALTH_CHECK_FOR_DYNAMIC_WIEGHTED_LB",
+"LARGE_DEPLOYMENT_WARNING",
+"LIST_OVERHEAD_QUOTA_EXCEED",
+"MISSING_TYPE_DEPENDENCY",
+"NEXT_HOP_ADDRESS_NOT_ASSIGNED",
+"NEXT_HOP_CANNOT_IP_FORWARD",
+"NEXT_HOP_INSTANCE_HAS_NO_IPV6_INTERFACE",
+"NEXT_HOP_INSTANCE_NOT_FOUND",
+"NEXT_HOP_INSTANCE_NOT_ON_NETWORK",
+"NEXT_HOP_NOT_RUNNING",
+"NOT_CRITICAL_ERROR",
+"NO_RESULTS_ON_PAGE",
+"PARTIAL_SUCCESS",
+"REQUIRED_TOS_AGREEMENT",
+"RESOURCE_IN_USE_BY_OTHER_RESOURCE_WARNING",
+"RESOURCE_NOT_DELETED",
+"SCHEMA_VALIDATION_IGNORED",
+"SINGLE_INSTANCE_PROPERTY_TEMPLATE",
+"UNDECLARED_PROPERTIES",
+"UNREACHABLE"
+],
+"enumDeprecated": [
+false,
+false,
+false,
+false,
+false,
+false,
+true,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false,
+false
+],
+"enumDescriptions": [
+"Warning about failed cleanup of transient changes made by a failed operation.",
+"A link to a deprecated resource was created.",
+"When deploying and at least one of the resources has a type marked as deprecated",
+"The user created a boot disk that is larger than image size.",
+"When deploying and at least one of the resources has a type marked as experimental",
+"Warning that is present in an external api call",
+"Warning that value of a field has been overridden. Deprecated unused field.",
+"The operation involved use of an injected kernel, which is deprecated.",
+"A WEIGHTED_MAGLEV backend service is associated with a health check that is not of type HTTP/HTTPS/HTTP2.",
+"When deploying a deployment with a exceedingly large number of resources",
+"Resource can't be retrieved due to list overhead quota exceed which captures the amount of resources filtered out by user-defined list filter.",
+"A resource depends on a missing type",
+"The route's nextHopIp address is not assigned to an instance on the network.",
+"The route's next hop instance cannot ip forward.",
+"The route's nextHopInstance URL refers to an instance that does not have an ipv6 interface on the same network as the route.",
+"The route's nextHopInstance URL refers to an instance that does not exist.",
+"The route's nextHopInstance URL refers to an instance that is not on the same network as the route.",
+"The route's next hop instance does not have a status of RUNNING.",
+"Error which is not critical. We decided to continue the process despite the mentioned error.",
+"No results are present on a particular list page.",
+"Success is reported, but some results may be missing due to errors",
+"The user attempted to use a resource that requires a TOS they have not accepted.",
+"Warning that a resource is in use.",
+"One or more of the resources set to auto-delete could not be deleted because they were in use.",
+"When a resource schema validation is ignored.",
+"Instance template used in instance group manager is valid as such, but its application does not make a lot of sense, because it allows only single instance in instance group.",
+"When undeclared properties in the schema are present",
+"A given scope cannot be reached."
+],
+"type": "string"
+},
+"data": {
+"description": "[Output Only] Metadata about this warning in key: value format. For example: \"data\": [ { \"key\": \"scope\", \"value\": \"zones/us-east1-d\" } ",
+"items": {
+"properties": {
+"key": {
+"description": "[Output Only] A key that provides more detail on the warning being returned. For example, for warnings where there are no results in a list request for a particular zone, this key might be scope and the key value might be the zone name. Other examples might be a key indicating a deprecated resource and a suggested replacement, or a warning about invalid network settings (for example, if an instance attempts to perform IP forwarding but is not enabled for IP forwarding).",
+"type": "string"
+},
+"value": {
+"description": "[Output Only] A warning data value corresponding to the key.",
+"type": "string"
+}
+},
+"type": "object"
+},
+"type": "array"
+},
+"message": {
+"description": "[Output Only] A human-readable description of the warning code.",
+"type": "string"
+}
+},
+"type": "object"
 }
 },
 "type": "object"
@@ -80801,6 +81298,10 @@ false
 "pattern": "[a-z](?:[-a-z0-9]{0,61}[a-z0-9])?",
 "type": "string"
 },
+"reservationSharingPolicy": {
+"$ref": "AllocationReservationSharingPolicy",
+"description": "Specify the reservation sharing policy. If unspecified, the reservation will not be shared with Google Cloud managed services."
+},
 "resourcePolicies": {
 "additionalProperties": {
 "type": "string"
@@ -82564,7 +83065,7 @@ false
 "type": "string"
 },
 "nextHopIlb": {
-"description": "The URL to a forwarding rule of type loadBalancingScheme=INTERNAL that should handle matching packets or the IP address of the forwarding Rule. For example, the following are all valid URLs: - 10.128.0.56 - https://www.googleapis.com/compute/v1/projects/project/regions/region /forwardingRules/forwardingRule - regions/region/forwardingRules/forwardingRule ",
+"description": "The URL to a forwarding rule of type loadBalancingScheme=INTERNAL that should handle matching packets or the IP address of the forwarding Rule. For example, the following are all valid URLs: - https://www.googleapis.com/compute/v1/projects/project/regions/region /forwardingRules/forwardingRule - regions/region/forwardingRules/forwardingRule If an IP address is provided, must specify an IPv4 address in dot-decimal notation or an IPv6 address in RFC 4291 format. For example, the following are all valid IP addresses: - 10.128.0.56 - 2001:db8::2d9:51:0:0 - 2001:db8:0:0:2d9:51:0:0 IPv6 addresses will be displayed using RFC 5952 compressed format (e.g. 2001:db8::2d9:51:0:0). Should never be an IPv4-mapped IPv6 address.",
 "type": "string"
 },
 "nextHopInstance": {
@@ -84044,7 +84545,7 @@ false
 "type": "string"
 },
 "match": {
-"description": "CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: \"inIpRange(destination.ip, '1.1.0.0/16') || inIpRange(destination.ip, '2.2.0.0/16')\" \"destination.ip == '1.1.0.1' || destination.ip == '8.8.8.8'\" The following example is a valid match expression for private NAT: \"nexthop.hub == '//networkconnectivity.googleapis.com/projects/my-project/locations/global/hubs/hub-1'\"",
+"description": "CEL expression that specifies the match condition that egress traffic from a VM is evaluated against. If it evaluates to true, the corresponding `action` is enforced. The following examples are valid match expressions for public NAT: `inIpRange(destination.ip, '1.1.0.0/16') || inIpRange(destination.ip, '2.2.0.0/16')` `destination.ip == '1.1.0.1' || destination.ip == '8.8.8.8'` The following example is a valid match expression for private NAT: `nexthop.hub == '//networkconnectivity.googleapis.com/projects/my-project/locations/global/hubs/hub-1'`",
 "type": "string"
 },
 "ruleNumber": {
@@ -84128,14 +84629,14 @@ false
 "id": "RouterStatus",
 "properties": {
 "bestRoutes": {
-"description": "Best routes for this router's network.",
+"description": "A list of the best dynamic routes for this Cloud Router's Virtual Private Cloud (VPC) network in the same region as this Cloud Router. Lists all of the best routes per prefix that are programmed into this region's VPC data plane. When global dynamic routing mode is turned on in the VPC network, this list can include cross-region dynamic routes from Cloud Routers in other regions.",
 "items": {
 "$ref": "Route"
 },
 "type": "array"
 },
 "bestRoutesForRouter": {
-"description": "Best routes learned by this router.",
+"description": "A list of the best BGP routes learned by this Cloud Router. It is possible that routes listed might not be programmed into the data plane, if the Google Cloud control plane finds a more optimal route for a prefix than a route learned by this Cloud Router.",
 "items": {
 "$ref": "Route"
 },
@@ -90615,7 +91116,12 @@ false
 "type": "string"
 },
 "poolProvisionedCapacityGb": {
-"description": "Size, in GiB, of the storage pool.",
+"annotations": {
+"required": [
+"compute.storagePools.insert"
+]
+},
+"description": "Size, in GiB, of the storage pool. For more information about the size limits, see https://cloud.google.com/compute/docs/disks/storage-pools.",
 "format": "int64",
 "type": "string"
 },
@@ -91292,7 +91798,7 @@ false
 "type": "string"
 },
 "poolUsedIops": {
-"description": "Sum of all the disks' provisioned IOPS, minus some amount that is allowed per disk that is not counted towards pool's IOPS capacity.",
+"description": "[Output Only] Sum of all the disks' provisioned IOPS, minus some amount that is allowed per disk that is not counted towards pool's IOPS capacity. For more information, see https://cloud.google.com/compute/docs/disks/storage-pools.",
 "format": "int64",
 "type": "string"
 },

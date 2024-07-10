@@ -18,12 +18,12 @@ class InMemoryHistory(BaseChatMessageHistory, BaseModel):
 
     def clear(self) -> None:
         self.messages = []
-store = {}
+store_xassist = {}
 
-def get_by_session_id(session_id: str) -> BaseChatMessageHistory:
-    if session_id not in store:
-        store[session_id] = InMemoryHistory()
-    return store[session_id]
+def get_by_session_id_x(session_id: str) -> BaseChatMessageHistory:
+    if session_id not in store_xassist:
+        store_xassist[session_id] = InMemoryHistory()
+    return store_xassist[session_id]
 prompt = ChatPromptTemplate.from_messages([
     ("system", "You are a helpful assistant that will answer, response to the user's input"),
     MessagesPlaceholder(variable_name="history"),
@@ -32,7 +32,7 @@ prompt = ChatPromptTemplate.from_messages([
 chain = prompt | ChatOpenAI(api_key=OPENAI_API_KEY)
 chain_with_history = RunnableWithMessageHistory(
     chain,
-    get_by_session_id,
+    get_by_session_id_x,
     input_messages_key="question",
     history_messages_key="history",
 )

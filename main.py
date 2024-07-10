@@ -8,12 +8,13 @@ from langchain.agents import AgentExecutor
 from langchain_core.utils.function_calling import convert_to_openai_tool
 from langchain.agents.format_scratchpad.openai_tools import (format_to_openai_tool_messages,)
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 from langserve import add_routes
 from langchain_core.messages import AIMessage, HumanMessage
 import uvicorn
 from langchain.pydantic_v1 import BaseModel as LangChainBaseModel
 from pydantic import BaseModel
-from ai_with_memory import chain_with_history
+from ai_with_memory import chain_with_history, get_by_session_id_x
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain.tools.retriever import create_retriever_tool
 from langchain_openai import OpenAIEmbeddings
@@ -21,7 +22,6 @@ from langchain_text_splitters import CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
 from langchain_google_community.drive import GoogleDriveLoader
 import os
-
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
 SERVEICE_ACCOUNT_KEY=os.environ.get('GOOGLE_APPLICATION_SECRETS')
 def create_retriever():
@@ -42,7 +42,7 @@ logging.basicConfig(level=logging.INFO)
 store={}
 def accessing_history(session_id:str):
     if session_id not in store:
-        store[session_id] = []
+        store[session_id] = {"Sagent":[],"Ragent":[]}
     return store[session_id]
 @tool
 def tavilysearch(search: str) ->str:
@@ -58,14 +58,10 @@ retriever_tool = create_retriever_tool(
 retriever_tools=[retriever_tool]
 two_tools=[retriever_tool,tavilysearch]
 
-
-
-
 my_prompt = ChatPromptTemplate.from_messages([
     ("system", "You are a helpful assistant that will answer, response to the user's input."),
     ("user", "{question}"),
 ])
-
 agent_prompt=ChatPromptTemplate.from_messages(    [
         (
             "system",
@@ -125,7 +121,6 @@ tavily_agent_history = (
     | OpenAIToolsAgentOutputParser()
 )
 
-
 both_tool_agent = ({
         "question": lambda x: x["question"],
         "agent_scratchpad": lambda x: format_to_openai_tool_messages(x["intermediate_steps"]),
@@ -136,14 +131,9 @@ both_tool_agent = ({
     | OpenAIToolsAgentOutputParser()
 )
 
-
-
-
-
 tavily_agent_executor = AgentExecutor(agent=tavily_agent, tools=tools, verbose=True)
 tavily_agent_executor_history =  AgentExecutor(agent=tavily_agent_history, tools=tools, verbose=True)
 retriever_tavily_agent_executor_history =AgentExecutor(agent=both_tool_agent, tools=two_tools, verbose=True)
-
 
 tavily_agent_with_history = RunnableWithMessageHistory(
     tavily_agent_executor_history,
@@ -152,43 +142,40 @@ tavily_agent_with_history = RunnableWithMessageHistory(
     get_session_history=accessing_history
 )
 
-
-
-
-
-
 app = FastAPI(title="LangChain APP")
 class QueryRequest(BaseModel):
     question: str
     session: str = None
+class ClearRequest(BaseModel):
+    session: str
 class Input(LangChainBaseModel):
     question: str
 class Output(LangChainBaseModel):
     output: str
 
-
 add_routes(app,chain.with_types(input_type=Input),playground_type="default", path="/Xassistant")
 add_routes(app, tavily_agent_executor.with_types(input_type=Input, output_type=Output).with_config({"run_name": "Sagent"}), path="/Sagent")
 #add_routes(app, retriever_agent_executor.with_types(input_type=Input, output_type=Output).with_config({"run_name": "Ragent"}), path="/Ragent")
-
-
-
 
 @app.post("/query/Xassitant")
 async def query_model(request: QueryRequest):
     input_data = request.question
     response = chain.invoke({"input": input_data})
     return {response.content}
-
-
 @app.post("/query/Xassistant-with-memory")
 async def query_model(request: QueryRequest):
     input_data = request.question
     session_id =  request.session
     response = chain_with_history.invoke({"question": input_data}, config={"configurable": {"session_id": session_id}})
-    return {response.content}
-
-
+    print(response.content)
+    return JSONResponse(content={"response": response.content})
+@app.post("/clear/Xassistant-with-memory")
+async def clear_model(request: ClearRequest):
+    session_id =  request.session
+    history = get_by_session_id_x(session_id=session_id)
+    history.clear()
+    print(history)
+    return JSONResponse(content={"response": "History cleared for Xassistant"})
 @app.post("/query/Sagent")
 async def agent_model(request: QueryRequest):
     input_data=request.question
@@ -222,25 +209,30 @@ async def agent_model(request: QueryRequest):
     final_content=response_list[-1]
     print(final_content.get('messages')[0].content)
     return {final_content.get('messages')[0].content}
-
 @app.post("/query/Sagent-memory")
 async def query_model(request: QueryRequest):
     input_data = request.question
     session_id =  request.session
-    history = accessing_history(session_id)
+    history = accessing_history(session_id)["Sagent"]
     response = tavily_agent_executor_history.invoke({"question": input_data, "history":history }, config={"configurable": {"session_id": session_id}})
     history.extend([
         HumanMessage(content=input_data),
         AIMessage(content=response["output"]),
     ])
     print(response)
-    return {response["output"]}
-
+    return JSONResponse(content={"response": response["output"]})
+@app.post("/clear/Sagent-memory")
+async def clear_model(request: ClearRequest):
+    session_id =  request.session
+    history = accessing_history(session_id)["Sagent"]
+    history.clear()
+    print(history)
+    return JSONResponse(content={"response": "History cleared for Sagent"})
 @app.post("/query/Ragent-memory")
 async def query_model(request: QueryRequest):
     input_data = request.question
     session_id =  request.session
-    history = accessing_history(session_id)
+    history = accessing_history(session_id)["Ragent"]
     retriever_tool = create_retriever_tool(
     create_retriever(),
     "search_state_of_union",
@@ -264,10 +256,17 @@ async def query_model(request: QueryRequest):
         HumanMessage(content=input_data),
         AIMessage(content=response["output"]),
     ])
+    print(response)
     if len(history)>3:
         history.pop(0)
-    print(response)
-    return {response["output"]}
+    return JSONResponse(content={"response": response["output"]})
+@app.post("/clear/Ragent-memory")
+async def clear_model(request: ClearRequest):
+    session_id =  request.session
+    history = accessing_history(session_id)["Ragent"]
+    history.clear()
+    print(history)
+    return JSONResponse(content={"response": "History cleared for Ragent"})
 @app.post("/query/RSagent-memory")
 async def query_model(request: QueryRequest):
     input_data = request.question
