@@ -13,10 +13,6 @@ INSTANCE = "google-drive-vector"
 DATABASE = "Google-drive-files"
 TABLE_NAME = "document_test"
 def create_db_tool():
-    if not os.path.exists(SERVEICE_ACCOUNT_KEY):
-        raise FileNotFoundError(f"File {SERVEICE_ACCOUNT_KEY} was not found.")
-    else:
-        print(f"File {SERVEICE_ACCOUNT_KEY} exists.")
     embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
     def connect_database(): 
         engine = PostgresEngine.from_instance(
