@@ -18,7 +18,6 @@ from ai_with_memory import chain_with_history, get_by_session_id_x
 from loading_doc import create_db_tool
 import os
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-SERVEICE_ACCOUNT_KEY=os.environ.get('GOOGLE_APPLICATION_SECRETS')
 
 logging.basicConfig(level=logging.INFO)
 store={}
