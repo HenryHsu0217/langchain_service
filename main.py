@@ -15,12 +15,6 @@ import uvicorn
 from langchain.pydantic_v1 import BaseModel as LangChainBaseModel
 from pydantic import BaseModel
 from ai_with_memory import chain_with_history, get_by_session_id_x
-from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain.tools.retriever import create_retriever_tool
-from langchain_openai import OpenAIEmbeddings
-from langchain_text_splitters import CharacterTextSplitter
-from langchain_community.vectorstores import FAISS
-from langchain_google_community.drive import GoogleDriveLoader
 from loading_doc import create_db_tool
 import os
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
